@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Study Buddy</title>
+    <style>
+        body { font-family: Arial; background: #f2f2f2; padding: 30px; }
+        textarea, input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; }
+        #result { background: white; padding: 15px; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+<h2>📘 AI Study Buddy (Offline) </h2>
+
+<textarea id="context" placeholder="Paste your study notes here..."></textarea>
+<input id="question" placeholder="Ask your question...">
+<button onclick="ask()">Ask</button>
+
+<div id="result"></div>
+
+<script>
+function ask() {
+    fetch("/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            context: document.getElementById("context").value,
+            question: document.getElementById("question").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("result").innerHTML =
+            "<b>Answer:</b> " + data.answer + "<br><b>Confidence:</b> " + data.score;
+    });
+}
+</script>
+
+</body>
+</html>
